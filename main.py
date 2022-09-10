@@ -2,8 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 
-#url = 'https://www.amazon.com/American-Civil-War-Chess-Set/product-reviews/B08CBG12RZ/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews&pageNumber=1'
-#url = 'https://www.amazon.com/Wagners-13008-Deluxe-Wild-10-Pound/product-reviews/B00310210I/ref=cm_cr_arp_d_paging_btm_next_2?ie=UTF8&reviewerType=all_reviews&pageNumber=1'
+# Remove number at end of link
+url = 'https://www.amazon.com/American-Civil-War-Chess-Set/product-reviews/B08CBG12RZ/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews&pageNumber='
+#url = 'https://www.amazon.com/Wagners-13008-Deluxe-Wild-10-Pound/product-reviews/B00310210I/ref=cm_cr_arp_d_paging_btm_next_2?ie=UTF8&reviewerType=all_reviews&pageNumber='
 reviewlist = []
 
 def get_soup(url):
@@ -27,9 +28,8 @@ def get_reviews(soup):
     except:
         pass
 
-# This is for having pages.
 for x in range(1, 999):
-    soup = get_soup(f'https://www.amazon.com/Wagners-13008-Deluxe-Wild-10-Pound/product-reviews/B00310210I/ref=cm_cr_arp_d_paging_btm_next_2?ie=UTF8&reviewerType=all_reviews&pageNumber={x}')
+    soup = get_soup(f'{url}{x}')
     print(f'Getting page: {x}')
     get_reviews(soup)
     print(len(reviewlist))
@@ -42,15 +42,3 @@ for x in range(1, 999):
 df = pd.DataFrame(reviewlist)
 df.to_excel('BeautifulSoupPractice-ChessSet.xlsx', index=False)
 print('Finish')
-
-
-
-
-# Below is test. The .replace will look for the text and replace with whatever you ask.The .stripe at the end just removes the blank spaces
-# for item in reviews:
-#     title = item.find('a', {'data-hook': 'review-title'}).text.strip()
-#     rating = float(item.find('i', {'data-hook': 'review-star-rating'}).text.replace('out of 5 stars', '').strip())
-#     body = item.find('span', {'data-hook': 'review-body'}).text.strip()
-#     print(body)
-
-#print(soup.title.text) # Test to make sure it's working
